@@ -4,9 +4,9 @@
 set -e
 
 # Variables
-RESOURCE_GROUP="<your_resource_group>"
-CLUSTER_NAME="<your_aks_cluster_name>"
-NAMESPACE="<your_namespace>" # Set to "default" if not using a specific namespace
+RESOURCE_GROUP="usecase-bhargav"
+CLUSTER_NAME="usecase-aks"
+NAMESPACE="default" # Set to "default" if not using a specific namespace
 
 # Log into Azure
 echo "Logging into Azure..."
