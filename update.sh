@@ -1,5 +1,5 @@
 DEPLOYMENT_NAME='usecase-classic-pipeline'
-BUILD_ID=$2
+BUILD_ID=$1
 DEPLOYMENT_FILE='deployment'
 
 echo "Updating image tag in ${DEPLOYMENT_FILE}.yaml..."
