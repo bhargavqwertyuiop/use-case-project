@@ -1,9 +1,7 @@
-DEPLOYMENT_NAME='usecase-classic-pipeline'
 BUILD_ID=$1
-DEPLOYMENT_FILE='deployment'
 
 echo "Updating image tag in ${DEPLOYMENT_FILE}.yaml..."
-sed -i 's|image: .*|image: bhargavqwertyuiop/${DEPLOYMENT_NAME}:${BUILD_ID}|' ${DEPLOYMENT_FILE}.yaml
+sed -i 's|image: .*|image: bhargavqwertyuiop/usecase-classic-pipeline:${BUILD_ID}|' deployment.yaml
 
 echo "Configuring Git user..."
 git config --global user.name '$(GIT_USER)'
