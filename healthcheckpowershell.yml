@@ -1,0 +1,50 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  azureServiceConnection: 'aksazurereader'
+  resourceGroup: 'usecase-bhargav'
+  aksClusterName: 'usecase-aks'
+
+steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      Write-Host "Installing kubectl..."
+      az aks install-cli
+  displayName: 'Install kubectl'
+
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      Write-Host "Getting AKS credentials..."
+      az aks get-credentials --resource-group $(resourceGroup) --name $(aksClusterName)
+  displayName: 'Get AKS Credentials'
+
+- script: |
+    Write-Host "Checking node status..."
+    kubectl get nodes
+  displayName: 'Check Node Status'
+  pwsh: true
+
+- script: |
+    Write-Host "Checking pod status..."
+    kubectl get pods --all-namespaces
+  displayName: 'Check Pod Status'
+  pwsh: true
+
+- script: |
+    Write-Host "Monitoring resource usage..."
+    kubectl top nodes
+    kubectl top pods --all-namespaces
+  displayName: 'Monitor Resource Usage'
+  pwsh: true
