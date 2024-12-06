@@ -34,17 +34,16 @@ steps:
     Write-Host "Checking node status..."
     kubectl get nodes
   displayName: 'Check Node Status'
-  pwsh: true
+
 
 - script: |
     Write-Host "Checking pod status..."
     kubectl get pods --all-namespaces
   displayName: 'Check Pod Status'
-  pwsh: true
+
 
 - script: |
     Write-Host "Monitoring resource usage..."
     kubectl top nodes
     kubectl top pods --all-namespaces
   displayName: 'Monitor Resource Usage'
-  pwsh: true
