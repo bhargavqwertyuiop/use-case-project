@@ -2,7 +2,7 @@ trigger:
 - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
 
 variables:
   azureServiceConnection: 'aksazurereader'
@@ -30,20 +30,27 @@ steps:
       az aks get-credentials --resource-group $(resourceGroup) --name $(aksClusterName)
   displayName: 'Get AKS Credentials'
 
-- script: |
-    Write-Host "Checking node status..."
-    kubectl get nodes
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "Checking node status..."
+      kubectl get nodes
   displayName: 'Check Node Status'
 
-
-- script: |
-    Write-Host "Checking pod status..."
-    kubectl get pods --all-namespaces
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "Checking pod status..."
+      kubectl get pods --all-namespaces
   displayName: 'Check Pod Status'
 
-
-- script: |
-    Write-Host "Monitoring resource usage..."
-    kubectl top nodes
-    kubectl top pods --all-namespaces
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "Monitoring resource usage..."
+      kubectl top nodes
+      kubectl top pods --all-namespaces
   displayName: 'Monitor Resource Usage'
