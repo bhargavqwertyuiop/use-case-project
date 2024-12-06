@@ -12,6 +12,10 @@ NAMESPACE="default" # Set to "default" if not using a specific namespace
 echo "Logging into Azure..."
 az login --service-principal -u "$AZURE_CLIENT_ID" -p "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
 
+if [ $? -eq 0 ]; then
+    echo "Logged in to the Azure"
+fi
+
 # Get AKS credentials
 echo "Fetching AKS credentials..."
 az aks get-credentials --resource-group "$RESOURCE_GROUP" --name "$CLUSTER_NAME" --overwrite-existing
