@@ -41,12 +41,26 @@ steps:
   displayName: 'Check Pod Status'
 
 - script: |
-    echo "Checking cluster health..."
-    kubectl get componentstatuses
-  displayName: 'Check Cluster Health'
-
-- script: |
     echo "Monitoring resource usage..."
     kubectl top nodes
     kubectl top pods --all-namespaces
   displayName: 'Monitor Resource Usage'
+
+- script: |
+    echo "Generating report..."
+    echo "Node Status:" > report.txt
+    kubectl get nodes >> report.txt
+    echo "" >> report.txt
+    echo "Pod Status:" >> report.txt
+    kubectl get pods --all-namespaces >> report.txt
+    echo "" >> report.txt
+    echo "Resource Usage:" >> report.txt
+    kubectl top nodes >> report.txt
+    kubectl top pods --all-namespaces >> report.txt
+  displayName: 'Generate Report'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'report.txt'
+    ArtifactName: 'AKSHealthReport'
+  displayName: 'Publish Report'
