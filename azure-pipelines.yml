@@ -1,0 +1,56 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  azureServiceConnection: 'arm-aks-connection'
+  resourceGroup: 'usecase-bhargav'
+  aksClusterName: 'usecase-aks'
+
+steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      Write-Host "Installing kubectl..."
+      az aks install-cli
+  displayName: 'Install kubectl'
+
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      Write-Host "Getting AKS credentials..."
+      az aks get-credentials --resource-group $(resourceGroup) --name $(aksClusterName)
+  displayName: 'Get AKS Credentials'
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "Checking node status..."
+      kubectl get nodes
+  displayName: 'Check Node Status'
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "Checking pod status..."
+      kubectl get pods --all-namespaces
+  displayName: 'Check Pod Status'
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "Monitoring resource usage..."
+      kubectl top nodes
+      kubectl top pods --all-namespaces
+  displayName: 'Monitor Resource Usage'
